@@ -1,25 +1,20 @@
-// stores/sessionStore.js
-// Gestión de sesión — se sincroniza con Flask mediante fetch
+
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000'
+const API = 'https://tienda-backend-6w63.onrender.com/' || 'http://127.0.0.1:5000'
 
 export const useSessionStore = defineStore('session', () => {
-  // ── Estado ──────────────────────────────────────────────
   const usuario     = ref(JSON.parse(localStorage.getItem('usuario') || 'null'))
   const cargando    = ref(false)
   const error       = ref('')
   const mensaje     = ref('')
 
-  // ── Getters ─────────────────────────────────────────────
   const autenticado = computed(() => !!usuario.value)
   const esAdmin     = computed(() => usuario.value?.rol === 'admin')
   const nombreBienvenida = computed(() => usuario.value?.nombre || 'Invitado')
 
-  // ── Acciones ─────────────────────────────────────────────
 
-  /** Inicia sesión contra Flask POST /login */
   async function iniciarSesion(correo, password) {
     cargando.value = true
     error.value    = ''
@@ -36,7 +31,7 @@ export const useSessionStore = defineStore('session', () => {
       const datos = await respuesta.json()
 
       if (!respuesta.ok) {
-        // 400 / 401 — mostrar errores del servidor
+        
         error.value = datos.errores ? datos.errores.join(' ') : datos.mensaje
         return false
       }
@@ -54,7 +49,7 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
-  /** Cierra sesión en Flask POST /logout */
+
   async function cerrarSesion() {
     try {
       await fetch(`${API}/logout`, {
@@ -69,7 +64,6 @@ export const useSessionStore = defineStore('session', () => {
     error.value   = ''
   }
 
-  /** Verifica sesión activa GET /session (útil al recargar la app) */
   async function verificarSesion() {
     try {
       const respuesta = await fetch(`${API}/session`, {
