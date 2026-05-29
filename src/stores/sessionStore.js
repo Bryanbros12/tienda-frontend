@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-const API = 'https://tienda-backend-6w63.onrender.com/' 
+const API = 'https://tienda-backend-6w63.onrender.com' 
 
 export const useSessionStore = defineStore('session', () => {
   const usuario     = ref(JSON.parse(localStorage.getItem('usuario') || 'null'))
@@ -22,11 +22,16 @@ export const useSessionStore = defineStore('session', () => {
 
     try {
       const respuesta = await fetch(`${API}/login`, {
-        method:      'POST',
-        credentials: 'include',          // envía/recibe la cookie de sesión
-        headers:     { 'Content-Type': 'application/json' },
-        body:        JSON.stringify({ correo, password }),
-      })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json' // 
+      },
+      body: JSON.stringify({
+        correo: correoInput,     //
+        password: passwordInput   //
+      }),
+      credentials: 'include'       //
+    })
 
       const datos = await respuesta.json()
 
