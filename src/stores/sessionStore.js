@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-const API = 'https://tienda-backend-6w63.onrender.com/' || 'http://127.0.0.1:5000'
+const API = 'https://tienda-backend-6w63.onrender.com/' 
 
 export const useSessionStore = defineStore('session', () => {
   const usuario     = ref(JSON.parse(localStorage.getItem('usuario') || 'null'))
